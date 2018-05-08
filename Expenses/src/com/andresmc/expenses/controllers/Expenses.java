@@ -15,9 +15,10 @@ import com.andresmc.expenses.models.Result;
 @Path("/")
 public class Expenses {
 	@GET
-	@Path("/new/{date: [0-9 -:]+}/{name}/{amount: [0-9.]+}/{type}/{categories}/{currency}")
+	@Path("/new/{user}/{date: [0-9 -:]+}/{name}/{amount: [0-9.]+}/{type}/{categories}/{currency}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Result insertExpense(
+			@PathParam("user") String user,
 			@PathParam("date") String date, 
 			@PathParam("name") String name, 
 			@PathParam("amount") double amount, 
@@ -25,7 +26,7 @@ public class Expenses {
 			@PathParam("categories") String categories, 
 			@PathParam("currency") String currency) 
 	{
-		Expense expense = new Expense(date, name, amount, type, categories, currency);
+		Expense expense = new Expense(user, date, name, amount, type, categories, currency);
 		
 		long id = ExpensesManager.insertExpense(expense);
 		
@@ -38,20 +39,20 @@ public class Expenses {
 	}
 	
 	@GET
-	@Path("/getAll")
+	@Path("/getAll/{user}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Expense> getAll()
+	public List<Expense> getAll(@PathParam("user") String user)
 	{
 		List<Expense> expenses = null;
-		expenses = ExpensesManager.getAllExpenses();
+		expenses = ExpensesManager.getAllExpenses(user);
 		
-		System.out.println("Devolvemos " + expenses.size() + " gastos.");
+		System.out.println("Devolvemos " + expenses.size() + " gastos del usuario: " + user + ".");
 		
 		return expenses;
 	}
 	
 	@GET
-	@Path("/get")
+	@Path("/get/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Expense getExpense(@PathParam("id") long id) {
 		ExpensesManager.getExpense(id);

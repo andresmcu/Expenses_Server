@@ -2,11 +2,12 @@ package com.andresmc.expenses.models;
 
 public class Expense {
 	private int id;
-	private String date, name, type, categories, currency;
+	private String user, date, name, type, categories, currency;
 	private double amount;
 	
-	public Expense(int id, String date, String name, double amount, String type, String categories, String currency) {
+	public Expense(int id, String user, String date, String name, double amount, String type, String categories, String currency) {
 		this.id = id;
+		this.user = user;
 		this.date = date;
 		this.name = name;
 		this.amount = amount;
@@ -15,7 +16,8 @@ public class Expense {
 		this.currency = currency;
 	}
 	
-	public Expense(String date, String name, double amount, String type, String categories, String currency) {
+	public Expense(String user, String date, String name, double amount, String type, String categories, String currency) {
+		this.user = user;
 		this.date = date;
 		this.name = name;
 		this.amount = amount;
@@ -30,6 +32,14 @@ public class Expense {
 	
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public String getUser() {
+		return user;
+	}
+	
+	public void setUser(String user) {
+		this.user = user;
 	}
 	
 	public String getDate() {

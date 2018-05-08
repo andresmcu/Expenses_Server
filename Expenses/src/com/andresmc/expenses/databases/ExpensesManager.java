@@ -15,7 +15,7 @@ public class ExpensesManager {
 		BDAgent bdagent = new BDAgent();
 		
 		try {
-			result = bdagent.insert("INSERT INTO expenses (date, name, amount, type, categories, currency) VALUES ('" + expense.getDate() + "', '" + expense.getName() + "', " + expense.getAmount() + ", '" + expense.getType() + "', '" + expense.getCategories() + "', '" + expense.getCurrency() + "')");
+			result = bdagent.insert("INSERT INTO expenses (user, date, name, amount, type, categories, currency) VALUES ('" + expense.getUser() + "', " + expense.getDate() + "', '" + expense.getName() + "', " + expense.getAmount() + ", '" + expense.getType() + "', '" + expense.getCategories() + "', '" + expense.getCurrency() + "')");
 		} catch (Exception e) {
 			System.out.println("ExpensesManager.insertExpense() Exception: \n");
 			e.printStackTrace();
@@ -24,15 +24,16 @@ public class ExpensesManager {
 		return result;
 	}
 	
-	public static List<Expense> getAllExpenses() {
+	public static List<Expense> getAllExpenses(String u) {
 		List<Expense> expenses = new ArrayList<Expense>();
 
 		BDAgent bdagent = new BDAgent();
 		
 		try {
-			CachedRowSet result = bdagent.select("SELECT * FROM expenses");
+			CachedRowSet result = bdagent.select("SELECT * FROM expenses WHERE user = '" + u + "'");
 			while (result.next()) {
 				int id = result.getInt("id");
+				String user = result.getString("user");
 				String date = result.getString("date");
 				String name = result.getString("name");
 				double amount = result.getDouble("amount");
@@ -40,7 +41,7 @@ public class ExpensesManager {
 				String categories = result.getString("categories");
 				String currency = result.getString("currency");
 				
-				expenses.add(new Expense(id, date, name, amount, type, categories, currency));
+				expenses.add(new Expense(id, user, date, name, amount, type, categories, currency));
 			}
 			
 		} catch (SQLException e) {
